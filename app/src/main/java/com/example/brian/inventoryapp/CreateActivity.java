@@ -33,6 +33,11 @@ public class CreateActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(CreateActivity.this, MainActivity.class);
+                String item = editTextItem.getText().toString().trim() +
+                              editTextModel.getText().toString().trim() +
+                              editTextSerial.getText().toString().trim() +
+                              editTextID.getText().toString().trim();
+                intent.putExtra("data", item);
                 startActivity(intent);
             }
         });
