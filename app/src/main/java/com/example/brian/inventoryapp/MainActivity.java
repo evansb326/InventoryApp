@@ -7,8 +7,9 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-
 import java.util.ArrayList;
+import java.util.Arrays;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -20,15 +21,15 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        itemListView = (ListView)findViewById(R.id.itemListView);
         setContentView(R.layout.activity_main);
 
+        itemListView = (ListView)findViewById(R.id.itemListView);
         Intent intent = getIntent();
         String item = intent.getStringExtra("data");
-        arrayList.add(item);
+        arrayList.addAll(Arrays.asList(item));
         arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, arrayList);
-        //arrayAdapter.notifyDataSetChanged();
-        //itemListView.getAdapter(arrayAdapter);
+        arrayAdapter.add(item);
+        //itemListView.setAdapter(arrayAdapter);
 
         addButton = (Button) findViewById(R.id.addButton);
         addButton.setOnClickListener(new View.OnClickListener(){
