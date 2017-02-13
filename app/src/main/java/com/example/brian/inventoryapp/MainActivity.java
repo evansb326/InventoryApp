@@ -33,13 +33,13 @@ public class MainActivity extends AppCompatActivity {
         if(editTextData != null){
 
             itemListView = (ListView)findViewById(R.id.itemListView);
-            String item = editTextData.getString("data");
+            String data = editTextData.getString("data");
             arrayList = new ArrayList<String>();
-            arrayList.add(item);
+            arrayList.add(data);
             arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, arrayList);
             itemListView.setAdapter(arrayAdapter);
 
-            if(item != ""){
+            if(data != ""){
 
                     arrayAdapter.notifyDataSetChanged();
             }
