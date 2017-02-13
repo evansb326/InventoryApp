@@ -9,27 +9,42 @@ import android.widget.Button;
 import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+
+import static android.R.layout.simple_list_item_1;
 
 
 public class MainActivity extends AppCompatActivity {
 
     Button addButton;
     ListView itemListView;
-    public static ArrayList<String> arrayList = new ArrayList<>();
-    public static ArrayAdapter<String> arrayAdapter;
+    public static ArrayList<String> arrayList;
+    public static ArrayAdapter arrayAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        itemListView = (ListView)findViewById(R.id.itemListView);
-        Intent intent = getIntent();
-        String item = intent.getStringExtra("data");
-        arrayList.addAll(Arrays.asList(item));
-        arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, arrayList);
-        arrayAdapter.add(item);
-        //itemListView.setAdapter(arrayAdapter);
+
+
+        Bundle editTextData = getIntent().getExtras();
+
+        if(editTextData != null){
+
+            itemListView = (ListView)findViewById(R.id.itemListView);
+            String item = editTextData.getString("data");
+            arrayList = new ArrayList<String>();
+            arrayList.add(item);
+            arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, arrayList);
+            itemListView.setAdapter(arrayAdapter);
+
+            if(item != ""){
+
+                    arrayAdapter.notifyDataSetChanged();
+            }
+        }
+
 
         addButton = (Button) findViewById(R.id.addButton);
         addButton.setOnClickListener(new View.OnClickListener(){
