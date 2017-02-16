@@ -38,9 +38,12 @@ public class CreateActivity extends AppCompatActivity {
                               editTextSerial.getText().toString().trim() +
                               editTextID.getText().toString().trim();
 
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                Intent intent = new Intent();
                 intent.putExtra("data", item);
-                startActivity(intent);
+
+                setResult(RESULT_OK, intent);
+                finish();
+                //startActivity(intent);
             }
         });
 

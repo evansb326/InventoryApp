@@ -8,18 +8,16 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import static android.R.layout.simple_list_item_1;
 
 
 public class MainActivity extends AppCompatActivity {
 
-    Button addButton;
-    ListView itemListView;
-    public static ArrayList<String> arrayList;
-    public static ArrayAdapter arrayAdapter;
+    public static final int CREATE_REQUEST = 1;
+
+    private Button addButton;
+    private ListView itemListView;
+    private ArrayList<String> arrayList;
+    private ArrayAdapter arrayAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -28,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        Bundle editTextData = getIntent().getExtras();
+    /*    Bundle editTextData = getIntent().getExtras();
 
         if(editTextData != null){
 
@@ -45,16 +43,36 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+*/
+
+
+        itemListView = (ListView)findViewById(R.id.itemListView);
+        addButton = (Button)findViewById(R.id.addButton);
+
+        arrayList = new ArrayList<String>();
+        arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, arrayList);
+        itemListView.setAdapter(arrayAdapter);
 
         addButton = (Button) findViewById(R.id.addButton);
         addButton.setOnClickListener(new View.OnClickListener(){
            @Override
            public void onClick(View v) {
                Intent intent = new Intent(MainActivity.this, CreateActivity.class);
-               startActivity(intent);
+               startActivityForResult(intent, CREATE_REQUEST);
            }
 
        });
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == CREATE_REQUEST){
+            if(resultCode == RESULT_OK){
+                String item = data.getStringExtra("data");
+                arrayList.add(item);
+                arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, arrayList);
+                itemListView.setAdapter(arrayAdapter);
+            }
+        }
+    }
 }
