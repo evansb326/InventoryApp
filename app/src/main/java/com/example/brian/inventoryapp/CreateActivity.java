@@ -33,17 +33,17 @@ public class CreateActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String item = "";
-                item = editTextItem.getText().toString().trim() +
-                              editTextModel.getText().toString().trim() +
-                              editTextSerial.getText().toString().trim() +
-                              editTextID.getText().toString().trim();
+                item = "Item: " +editTextItem.getText().toString()  + "\n" +
+                        "Model Number: " + editTextModel.getText().toString() + "\n" +
+                        "Serial Number: " + editTextSerial.getText().toString() + "\n" +
+                        "ID Number: " + editTextID.getText().toString();
 
                 Intent intent = new Intent();
                 intent.putExtra("data", item);
 
                 setResult(RESULT_OK, intent);
                 finish();
-                //startActivity(intent);
+
             }
         });
 

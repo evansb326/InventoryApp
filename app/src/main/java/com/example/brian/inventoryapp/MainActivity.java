@@ -19,32 +19,12 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> arrayList;
     private ArrayAdapter arrayAdapter;
 
+    SqliteHelper myDatabase = new SqliteHelper(this);
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
-
-    /*    Bundle editTextData = getIntent().getExtras();
-
-        if(editTextData != null){
-
-            itemListView = (ListView)findViewById(R.id.itemListView);
-            String data = editTextData.getString("data");
-            arrayList = new ArrayList<String>();
-            arrayList.add(data);
-            arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, arrayList);
-            itemListView.setAdapter(arrayAdapter);
-
-            if(data != ""){
-
-                    arrayAdapter.notifyDataSetChanged();
-            }
-        }
-
-*/
-
 
         itemListView = (ListView)findViewById(R.id.itemListView);
         addButton = (Button)findViewById(R.id.addButton);
