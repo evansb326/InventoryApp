@@ -43,7 +43,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
 
 
 
-    public boolean insertData(String item, String model_number, String serial_number, String id_number, SQLiteDatabase db){
+    public void insertData(String item, String model_number, String serial_number, String id_number, SQLiteDatabase db) {
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(ITEM, item);
@@ -53,6 +53,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
 
         db.insert(TABLE_NAME, null, contentValues);
         Log.e("DATABASE OPERATIONS", "One row inserted...");
+
        /* long result = db.insert(TABLE_NAME, null, contentValues);
 
         if(result == -1){
@@ -63,6 +64,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
         }
 */
     }
+
 
     public boolean removeData(int position){
         SQLiteDatabase databasee = this.getWritableDatabase();
