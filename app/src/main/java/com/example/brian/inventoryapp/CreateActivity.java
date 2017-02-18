@@ -52,7 +52,6 @@ public class CreateActivity extends AppCompatActivity {
 
                 Intent intent = new Intent();
                 intent.putExtra("data", item);
-
                 setResult(RESULT_OK, intent);
                 finish();
 

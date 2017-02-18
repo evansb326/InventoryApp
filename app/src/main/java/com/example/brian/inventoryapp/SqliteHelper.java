@@ -51,7 +51,9 @@ public class SqliteHelper extends SQLiteOpenHelper {
         contentValues.put(SERIAL_NUMBER, serial_number);
         contentValues.put(ID, id_number);
 
-        long result = db.insert(TABLE_NAME, null, contentValues);
+        db.insert(TABLE_NAME, null, contentValues);
+        Log.e("DATABASE OPERATIONS", "One row inserted...");
+       /* long result = db.insert(TABLE_NAME, null, contentValues);
 
         if(result == -1){
             return false;
@@ -59,7 +61,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
         else{
             return true;
         }
-
+*/
     }
 
     public boolean removeData(int position){
