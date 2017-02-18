@@ -5,28 +5,34 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 
 public class SqliteHelper extends SQLiteOpenHelper {
 
-    public static final String DATABASE_NAME = "INVENTORY_DB";
     public static final String TABLE_NAME = "INVENTORY_TABLE";
-    public static final int VERSION = 1;
     public static final String ITEM = "INVENTORY_ITEM";
     public static final String MODEL_NUMBER = "MODEL_NUMBER";
     public static final String SERIAL_NUMBER = "SERIAL_NUMBER";
     public static final String ID = "UNIQUE_ID";
 
 
-    public SqliteHelper(Context context){super(context,DATABASE_NAME,null,1);}
+    private static final String DATABASE_NAME = "INVENTORY_DB";
+    private static final int VERSION = 1;
+    private static final String CREATE_QUERY = "CREATE TABLE " + TABLE_NAME + "(" + ITEM + " TEXT,"
+            + MODEL_NUMBER + " TEXT," + SERIAL_NUMBER + " TEXT," + ID + " TEXT);";
+
+    public SqliteHelper(Context context){
+
+        super(context,DATABASE_NAME,null,VERSION,null);
+        Log.e("DATABASE OPERATIONS", "Database created / opened...");
+
+    }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE " + TABLE_NAME
-                    + "INVENTORY_ITEM " + ITEM
-                    + " MODEL_NUMBER " + MODEL_NUMBER
-                    + " SERIAL_NUMBER " + SERIAL_NUMBER
-                    + " UNIQUE_ID " + ID);
+        db.execSQL(CREATE_QUERY);
+        Log.e("DATABASE OPERATIONS", "TABLE Created...");
 
     }
 
@@ -35,17 +41,17 @@ public class SqliteHelper extends SQLiteOpenHelper {
         db.execSQL("DROP IF TABLE EXISTS " + TABLE_NAME);
     }
 
-    
 
-    public boolean insertData(String inventory_item, String model_number, String serial_number, String unique_id){
-        SQLiteDatabase database = this.getWritableDatabase();
+
+    public boolean insertData(String item, String model_number, String serial_number, String id_number, SQLiteDatabase db){
+
         ContentValues contentValues = new ContentValues();
-        contentValues.put(ITEM, inventory_item);
+        contentValues.put(ITEM, item);
         contentValues.put(MODEL_NUMBER, model_number);
         contentValues.put(SERIAL_NUMBER, serial_number);
-        contentValues.put(ID, unique_id);
+        contentValues.put(ID, id_number);
 
-        long result = database.insert(TABLE_NAME, null, contentValues);
+        long result = db.insert(TABLE_NAME, null, contentValues);
 
         if(result == -1){
             return false;
