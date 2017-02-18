@@ -74,9 +74,4 @@ public class CreateActivity extends AppCompatActivity {
 
     }
 
-    private void addToDatabase(View view) {
-
-
-
-    }
 }
