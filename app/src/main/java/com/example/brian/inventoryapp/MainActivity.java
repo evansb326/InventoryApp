@@ -1,6 +1,7 @@
 package com.example.brian.inventoryapp;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -18,20 +19,21 @@ public class MainActivity extends AppCompatActivity {
     private ListView itemListView;
     private ArrayList<String> arrayList;
     private ArrayAdapter arrayAdapter;
+    private SQLiteDatabase newDatabase;
 
-    SqliteHelper myDatabase = new SqliteHelper(this);
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         itemListView = (ListView)findViewById(R.id.itemListView);
-        addButton = (Button)findViewById(R.id.addButton);
+
 
         arrayList = new ArrayList<String>();
         arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, arrayList);
-        itemListView.setAdapter(arrayAdapter);
+
 
         addButton = (Button) findViewById(R.id.addButton);
         addButton.setOnClickListener(new View.OnClickListener(){
@@ -44,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
        });
     }
 
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == CREATE_REQUEST){
@@ -54,5 +57,8 @@ public class MainActivity extends AppCompatActivity {
                 itemListView.setAdapter(arrayAdapter);
             }
         }
+
+
+
     }
 }

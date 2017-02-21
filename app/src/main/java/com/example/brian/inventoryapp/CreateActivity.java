@@ -66,7 +66,6 @@ public class CreateActivity extends AppCompatActivity {
                 dbHelper.close();
 
 
-
                 finish();
 
             }

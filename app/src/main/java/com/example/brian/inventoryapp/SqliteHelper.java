@@ -10,6 +10,8 @@ import android.util.Log;
 
 public class SqliteHelper extends SQLiteOpenHelper {
 
+    private static final int VERSION = 1;
+    private static final String DATABASE_NAME = "INVENTORY_DB";
     public static final String TABLE_NAME = "INVENTORY_TABLE";
     public static final String ITEM = "INVENTORY_ITEM";
     public static final String MODEL_NUMBER = "MODEL_NUMBER";
@@ -17,10 +19,12 @@ public class SqliteHelper extends SQLiteOpenHelper {
     public static final String ID = "UNIQUE_ID";
 
 
-    private static final String DATABASE_NAME = "INVENTORY_DB";
-    private static final int VERSION = 1;
-    private static final String CREATE_QUERY = "CREATE TABLE " + TABLE_NAME + "(" + ITEM + " TEXT,"
-            + MODEL_NUMBER + " TEXT," + SERIAL_NUMBER + " TEXT," + ID + " TEXT);";
+    private static final String CREATE_QUERY = "CREATE TABLE " + TABLE_NAME + " ( "
+            + ID + " INTEGER PRIMARY KEY AUTOINCREMENT "
+            + ITEM + " TEXT "
+            + MODEL_NUMBER + " TEXT "
+            + SERIAL_NUMBER + " TEXT);";
+
 
     public SqliteHelper(Context context){
 
@@ -39,6 +43,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP IF TABLE EXISTS " + TABLE_NAME);
+        Log.e("DATABASE OPERATIONS", "Database dropped...");
     }
 
 
@@ -54,15 +59,6 @@ public class SqliteHelper extends SQLiteOpenHelper {
         db.insert(TABLE_NAME, null, contentValues);
         Log.e("DATABASE OPERATIONS", "One row inserted...");
 
-       /* long result = db.insert(TABLE_NAME, null, contentValues);
-
-        if(result == -1){
-            return false;
-        }
-        else{
-            return true;
-        }
-*/
     }
 
 
