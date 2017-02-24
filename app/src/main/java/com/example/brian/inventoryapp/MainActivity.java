@@ -19,7 +19,6 @@ public class MainActivity extends AppCompatActivity {
     private ListView itemListView;
     private ArrayList<String> arrayList;
     private ArrayAdapter arrayAdapter;
-    private SQLiteDatabase newDatabase;
 
 
     @Override
@@ -32,8 +31,16 @@ public class MainActivity extends AppCompatActivity {
 
 
         arrayList = new ArrayList<String>();
-        arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, arrayList);
+        SqliteHelper dbContext = new SqliteHelper(this.getApplicationContext());
+        ArrayList currentData = dbContext.getData();
+        ArrayList<String> currentDataStrings = new ArrayList<>();
+        for (Object item : currentData) {
+            currentDataStrings.add(item.toString());
+        }
+        arrayList.addAll(currentDataStrings);
 
+        arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, arrayList);
+        itemListView.setAdapter(arrayAdapter);
 
         addButton = (Button) findViewById(R.id.addButton);
         addButton.setOnClickListener(new View.OnClickListener(){
@@ -51,10 +58,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == CREATE_REQUEST){
             if(resultCode == RESULT_OK){
-                String item = data.getStringExtra("data");
-                arrayList.add(item);
+                InventoryItem item = (InventoryItem)data.getExtras().get("b");
+                //String item = data.getStringExtra("data");
+                arrayList.add(item.toString());
                 arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, arrayList);
-                itemListView.setAdapter(arrayAdapter);
+                //itemListView.setAdapter(arrayAdapter);
+
+                //add to the db
+                SqliteHelper database = new SqliteHelper(this.getApplicationContext());
+                database.addToDatabase(item);
             }
         }
 
