@@ -37,6 +37,8 @@ public class SqliteHelper extends SQLiteOpenHelper {
     public static final String ID = "unique_id";
 
 
+    //This method is what creates the database and insterts the columns using a try catch block
+    //and also creates the file path where the database is saved.
     SQLiteDatabase db;
     public SqliteHelper(Context context){
 
@@ -61,7 +63,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
             e.printStackTrace();
         }
 
-
+        //Log for Android Monitor and logcat
         Log.e("DATABASE OPERATIONS", "Database created / opened...");
 
     }
@@ -86,13 +88,10 @@ public class SqliteHelper extends SQLiteOpenHelper {
 
 
     }
-
+    //Method that uses the InventoryItem model class to add items to the database
     public void addToDatabase(InventoryItem newItem) {
 
-     //   SQLiteDatabase database = SQLiteDatabase.openOrCreateDatabase(DATABASE_NAME, null);
-     //   SQLiteDatabase database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-
         contentValues.put(ITEM, newItem.getItem());
         contentValues.put(MODEL_NUMBER, newItem.getModelNumber());
         contentValues.put(SERIAL_NUMBER, newItem.getSerialNumber());
@@ -103,12 +102,15 @@ public class SqliteHelper extends SQLiteOpenHelper {
 
     }
 
-
+    //Used to remove inventory items
+    //Currently not in use
     public boolean removeData(int position) {
         db.delete(TABLE_NAME, ID + "=" + position, null);
         return true;
     }
 
+    //Selects on items in enventory using a Cursor that gets the rawQuery
+    // using basic database commands.
     public ArrayList<InventoryItem> getData(){
         ArrayList<InventoryItem> data = new ArrayList<InventoryItem>();
         Cursor c = db.rawQuery("SELECT * FROM " + TABLE_NAME, null);

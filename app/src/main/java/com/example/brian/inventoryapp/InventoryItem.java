@@ -1,5 +1,6 @@
 package com.example.brian.inventoryapp;
 
+//Model class that has getter and setter methods for the item, modelNumber, serialNumber, and id
 
 import java.io.Serializable;
 
@@ -9,9 +10,6 @@ public class InventoryItem implements Serializable {
     String serialNumber;
     String id;
 
-    public InventoryItem(){
-
-    }
 
     public InventoryItem(String item, String modelNumber, String serialNumber, String id){
         this.item = item;

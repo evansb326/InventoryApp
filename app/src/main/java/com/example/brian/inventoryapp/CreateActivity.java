@@ -47,27 +47,7 @@ public class CreateActivity extends AppCompatActivity {
                 setResult(RESULT_OK, intent);
 
                 finish();
-/*
 
-
-                String item = "";
-                item = "Item: " +editTextItem.getText().toString()  + "\n" +
-                        "Model Number: " + editTextModel.getText().toString() + "\n" +
-                        "Serial Number: " + editTextSerial.getText().toString() + "\n" +
-                        "ID Number: " + editTextID.getText().toString();
-
-
-                Intent intent = new Intent();
-                intent.putExtra("data", item);
-                setResult(RESULT_OK, intent);
-
-                String inventory_item = editTextItem.getText().toString();
-                String model = editTextModel.getText().toString();
-                String serial = editTextSerial.getText().toString();
-                String id = editTextID.getText().toString();
-
-                finish();
-*/
             }
         });
 
