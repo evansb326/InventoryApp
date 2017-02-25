@@ -48,10 +48,6 @@ public class InventoryItem implements Serializable {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public String toString() {
         return "Item: " + item  + "\n" +
                 "Model Number: " + modelNumber + "\n" +

@@ -4,10 +4,15 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,10 +24,10 @@ public class SqliteHelper extends SQLiteOpenHelper {
 
     private static String DB_PATH;
     //Database name
-    private static final String DATABASE_NAME = "inventoryManager";
+    private static final String DATABASE_NAME = "inventoryManager.db";
 
     //Inventory table name
-    public static final String TABLE_NAME = "inventory.db";
+    public static final String TABLE_NAME = "InventoryItems";
 
     //Inventory table column names
     public static final String ITEM = "inventory_item";
@@ -32,12 +37,30 @@ public class SqliteHelper extends SQLiteOpenHelper {
     public static final String ID = "unique_id";
 
 
+    SQLiteDatabase db;
     public SqliteHelper(Context context){
 
         super(context,DATABASE_NAME,null,VERSION);
+        db = null;
+        try {
+            DB_PATH = context.getFilesDir().getAbsolutePath() + File.separator + DATABASE_NAME;
 
-        DB_PATH = context.getFilesDir().getAbsolutePath().replace("files",
-                "databases")+ File.separator + DATABASE_NAME;
+            File file = new File(DB_PATH);
+            if(file.exists())
+                db = SQLiteDatabase.openDatabase(DB_PATH, null, SQLiteDatabase.OPEN_READWRITE);
+            else {
+                db = SQLiteDatabase.openOrCreateDatabase(DB_PATH, null);
+                String CREATE_QUERY = "CREATE TABLE " + TABLE_NAME + "("
+                        + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                        + ITEM + " TEXT,"
+                        + MODEL_NUMBER + " TEXT,"
+                        + SERIAL_NUMBER + " TEXT" + ")";
+                db.execSQL(CREATE_QUERY);
+            }
+        }catch(SQLiteException e){
+            e.printStackTrace();
+        }
+
 
         Log.e("DATABASE OPERATIONS", "Database created / opened...");
 
@@ -45,16 +68,12 @@ public class SqliteHelper extends SQLiteOpenHelper {
     //Create table
     @Override
     public void onCreate(SQLiteDatabase db) {
-         String CREATE_QUERY = "CREATE TABLE" + TABLE_NAME + "("
-                + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + ITEM + " TEXT,"
-                + MODEL_NUMBER + " TEXT,"
-                + SERIAL_NUMBER + " TEXT" + ")";
 
-        db.execSQL(CREATE_QUERY);
         Log.e("DATABASE OPERATIONS", "TABLE Created...");
 
     }
+
+
 
     @Override
     public void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion) {
@@ -65,36 +84,34 @@ public class SqliteHelper extends SQLiteOpenHelper {
         onCreate(database);
 
 
+
     }
 
     public void addToDatabase(InventoryItem newItem) {
 
-        SQLiteDatabase database = SQLiteDatabase.openOrCreateDatabase(DATABASE_NAME, null);
-        //SQLiteDatabase database = this.getWritableDatabase();
+     //   SQLiteDatabase database = SQLiteDatabase.openOrCreateDatabase(DATABASE_NAME, null);
+     //   SQLiteDatabase database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
 
         contentValues.put(ITEM, newItem.getItem());
         contentValues.put(MODEL_NUMBER, newItem.getModelNumber());
         contentValues.put(SERIAL_NUMBER, newItem.getSerialNumber());
         //contentValues.put(ID, newItem.getId());
-        database.insert(TABLE_NAME, null, contentValues);
+        db.insert(TABLE_NAME, null, contentValues);
         Log.e("DATABASE OPERATIONS", "One row inserted...");
-        database.close();
+        db.close();
 
     }
 
 
-    public boolean removeData(int position){
-        SQLiteDatabase databasee = this.getWritableDatabase();
-        databasee.delete(TABLE_NAME, ID + "=" + position, null);
+    public boolean removeData(int position) {
+        db.delete(TABLE_NAME, ID + "=" + position, null);
         return true;
     }
 
     public ArrayList<InventoryItem> getData(){
-        //SQLiteDatabase database = SQLiteDatabase.openOrCreateDatabase(DB_PATH + "/" + DATABASE_NAME, null);
-        SQLiteDatabase database = SQLiteDatabase.openOrCreateDatabase(DB_PATH + TABLE_NAME, null);
         ArrayList<InventoryItem> data = new ArrayList<InventoryItem>();
-        Cursor c = database.rawQuery("SELECT * FROM " + TABLE_NAME, null);
+        Cursor c = db.rawQuery("SELECT * FROM " + TABLE_NAME, null);
 
         if (c != null ) {
             if  (c.moveToFirst()) {

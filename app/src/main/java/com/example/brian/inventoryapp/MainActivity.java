@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
                 //String item = data.getStringExtra("data");
                 arrayList.add(item.toString());
                 arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, arrayList);
-                //itemListView.setAdapter(arrayAdapter);
+                itemListView.setAdapter(arrayAdapter);
 
                 //add to the db
                 SqliteHelper database = new SqliteHelper(this.getApplicationContext());
