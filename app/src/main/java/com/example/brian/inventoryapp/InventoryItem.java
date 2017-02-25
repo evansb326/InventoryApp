@@ -4,21 +4,21 @@ package com.example.brian.inventoryapp;
 
 import java.io.Serializable;
 
-public class InventoryItem implements Serializable {
-    String item;
-    String modelNumber;
-    String serialNumber;
-    String id;
+class InventoryItem implements Serializable {
+    private String item;
+    private String modelNumber;
+    private String serialNumber;
+    private String id;
 
 
-    public InventoryItem(String item, String modelNumber, String serialNumber, String id){
+    InventoryItem(String item, String modelNumber, String serialNumber, String id){
         this.item = item;
         this.modelNumber = modelNumber;
         this.serialNumber = serialNumber;
         this.id = id;
     }
 
-    public String getItem() {
+    String getItem() {
         return item;
     }
 
