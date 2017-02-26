@@ -4,11 +4,22 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.ContextMenu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ExpandableListView;
 import android.widget.ListView;
+import android.widget.PopupMenu;
+import android.widget.Toast;
+
 import java.util.ArrayList;
+
+import static android.R.attr.data;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -21,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private ListView itemListView;
     private ArrayList<String> arrayList;
     private ArrayAdapter arrayAdapter;
+    protected SqliteHelper dbContext;
 
 
     @Override
@@ -35,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         arrayList = new ArrayList<String>();
 
         //Instantiating the SqliteHelper class named dbContext
-        SqliteHelper dbContext = new SqliteHelper(this.getApplicationContext());
+        dbContext = new SqliteHelper(this.getApplicationContext());
 
         //ArrayList that populates the list view when the app starts using a for each loop
         //The currentData ArrayList uses the getData method thats created in the SqliteHelper class
@@ -51,8 +63,9 @@ public class MainActivity extends AppCompatActivity {
         // the built in simple_list_item_1 format to show inventory items
         arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, arrayList);
         itemListView.setAdapter(arrayAdapter);
+        registerForContextMenu(itemListView);
 
-        //Create a button and set the onClickListener to take you to another activity
+        //Make a button and set the onClickListener to take you to another activity
         addButton = (Button) findViewById(R.id.addButton);
         addButton.setOnClickListener(new View.OnClickListener(){
            @Override
@@ -62,8 +75,36 @@ public class MainActivity extends AppCompatActivity {
            }
 
        });
+
     }
 
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.item_context_menu, menu);
+
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info;
+        info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
+        switch (item.getItemId()){
+            case R.id.delete:
+                arrayList.remove(info.position);
+                dbContext.removeData(info.position);
+                Toast.makeText(MainActivity.this, "Deleted", Toast.LENGTH_SHORT).show();
+                arrayAdapter.notifyDataSetChanged();
+                return true;
+            case R.id.edit:
+                Intent intent = new Intent(MainActivity.this, CreateActivity.class);
+                intent.putExtra("position", info.position);
+                startActivity(intent);
+            default:
+                return super.onContextItemSelected(item);
+        }
+    }
 
     //The onActivityResult method is how the listview is populated with new inventory
     // items and gets saved to the database also uses an intent thats used to transfer data

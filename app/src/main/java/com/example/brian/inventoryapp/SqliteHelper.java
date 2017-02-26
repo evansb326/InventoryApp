@@ -105,7 +105,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
     //Used to remove inventory items
     //Currently not in use
     public boolean removeData(int position) {
-        db.delete(TABLE_NAME, ID + "=" + position, null);
+        db.delete(TABLE_NAME, position + "=" + position, null);
         return true;
     }
 

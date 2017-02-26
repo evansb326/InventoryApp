@@ -30,6 +30,9 @@ public class CreateActivity extends AppCompatActivity {
         editTextID = (EditText)findViewById(R.id.editTextID);
         createButton = (Button) findViewById(R.id.createButton);
 
+        Intent intent = getIntent();
+        intent.getIntExtra("position", 0);
+
         createButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
