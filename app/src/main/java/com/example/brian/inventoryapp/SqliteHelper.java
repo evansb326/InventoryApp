@@ -53,10 +53,11 @@ public class SqliteHelper extends SQLiteOpenHelper {
             else {
                 db = SQLiteDatabase.openOrCreateDatabase(DB_PATH, null);
                 String CREATE_QUERY = "CREATE TABLE " + TABLE_NAME + "("
-                        + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                         + ITEM + " TEXT,"
                         + MODEL_NUMBER + " TEXT,"
-                        + SERIAL_NUMBER + " TEXT" + ")";
+                        + SERIAL_NUMBER + " TEXT,"
+                        + ID + " INTEGER PRIMARY KEY AUTOINCREMENT"+ ")";
+
                 db.execSQL(CREATE_QUERY);
             }
         }catch(SQLiteException e){

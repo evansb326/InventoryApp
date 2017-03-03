@@ -22,15 +22,6 @@ public class CreateActivity extends AppCompatActivity {
         this.id = id;
     }
 
-    public int getid(){
-        return id;
-    }
-
-    public void setid(int id){
-        this.id = id;
-    }
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +33,10 @@ public class CreateActivity extends AppCompatActivity {
         editTextSerial = (EditText)findViewById(R.id.editTextSerial);
         editTextID = (EditText)findViewById(R.id.editTextID);
         createButton = (Button) findViewById(R.id.createButton);
+
+        if (id >= 0) {
+
+        }
 
         Intent intent = getIntent();
         intent.getIntExtra("position", 0);
