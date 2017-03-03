@@ -16,6 +16,19 @@ public class CreateActivity extends AppCompatActivity {
     EditText editTextID;
     Button createButton;
 
+    private int id;
+
+    public void CreateActivity(int id){
+        this.id = id;
+    }
+
+    public int getid(){
+        return id;
+    }
+
+    public void setid(int id){
+        this.id = id;
+    }
 
 
     @Override
@@ -36,19 +49,19 @@ public class CreateActivity extends AppCompatActivity {
         createButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                Bundle b = new Bundle();
+                Bundle bundle = new Bundle();
                 InventoryItem newItem = new InventoryItem(
                         editTextItem.getText().toString(),
                         editTextModel.getText().toString(),
                         editTextSerial.getText().toString(),
                         editTextID.getText().toString()
+
                 );
                 Intent intent = new Intent();
-                b.putSerializable("b", newItem);
-                intent.putExtras(b);
-                intent.putExtra("InventoryItem", newItem);
+                bundle.putSerializable("invItem", newItem);
+                intent.putExtras(bundle);
+                //intent.putExtra("InventoryItem", newItem);
                 setResult(RESULT_OK, intent);
-
                 finish();
 
             }

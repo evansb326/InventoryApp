@@ -9,6 +9,7 @@ import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -98,12 +99,23 @@ public class MainActivity extends AppCompatActivity {
                 arrayAdapter.notifyDataSetChanged();
                 return true;
             case R.id.edit:
-                Intent intent = new Intent(MainActivity.this, CreateActivity.class);
-                intent.putExtra("position", info.position);
-                startActivity(intent);
+
+                editItem(info.position);
+
+
             default:
                 return super.onContextItemSelected(item);
-        }
+
+    }
+}
+
+    private void editItem(int position) {
+        Intent intent = new Intent(MainActivity.this, editTextView.class);
+        String listStuff = arrayList.get(position);
+        intent.putExtra("listStuff", listStuff);
+        Log.i("Position:", listStuff);
+        startActivity(intent);
+
     }
 
     //The onActivityResult method is how the listview is populated with new inventory
@@ -112,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == CREATE_REQUEST){
             if(resultCode == RESULT_OK){
-                InventoryItem item = (InventoryItem)data.getExtras().get("b");
+                InventoryItem item = (InventoryItem)data.getExtras().get("invItem");
 
                 //String item = data.getStringExtra("data");
                 arrayList.add(item.toString());
