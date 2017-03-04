@@ -19,6 +19,8 @@ import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static android.R.attr.data;
 
@@ -99,10 +101,7 @@ public class MainActivity extends AppCompatActivity {
                 arrayAdapter.notifyDataSetChanged();
                 return true;
             case R.id.edit:
-
                 editItem(info.position);
-
-
             default:
                 return super.onContextItemSelected(item);
 
@@ -110,12 +109,24 @@ public class MainActivity extends AppCompatActivity {
 }
 
     private void editItem(int position) {
-        Intent intent = new Intent(MainActivity.this, editTextView.class);
+        Intent intent = new Intent(MainActivity.this, CreateActivity.class);
         String listStuff = arrayList.get(position);
-        intent.putExtra("listStuff", listStuff);
+
+        String id = extractItemId(listStuff);
+        intent.putExtra("id", id);
         Log.i("Position:", listStuff);
         startActivity(intent);
 
+    }
+
+    private String extractItemId(String text) {
+        final Pattern regex = Pattern.compile("(\\d+)");
+        Matcher m = regex.matcher(text);
+        if (m.find()) {
+            String i = m.group(1);
+            return i;
+        }
+        return "";
     }
 
     //The onActivityResult method is how the listview is populated with new inventory
@@ -131,9 +142,12 @@ public class MainActivity extends AppCompatActivity {
                 arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, arrayList);
                 itemListView.setAdapter(arrayAdapter);
 
-                //Add to the db
                 SqliteHelper database = new SqliteHelper(this.getApplicationContext());
-                database.addToDatabase(item);
+                //Add to the db
+                if (data.getExtras().containsKey("modify"))
+                    database.modifyItem(item);
+                else
+                    database.addToDatabase(item);
             }
         }
 

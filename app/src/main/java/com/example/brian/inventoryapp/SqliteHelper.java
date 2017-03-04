@@ -96,7 +96,6 @@ public class SqliteHelper extends SQLiteOpenHelper {
         contentValues.put(ITEM, newItem.getItem());
         contentValues.put(MODEL_NUMBER, newItem.getModelNumber());
         contentValues.put(SERIAL_NUMBER, newItem.getSerialNumber());
-        //contentValues.put(ID, newItem.getId());
         db.insert(TABLE_NAME, null, contentValues);
         Log.e("DATABASE OPERATIONS", "One row inserted...");
         db.close();
@@ -120,10 +119,10 @@ public class SqliteHelper extends SQLiteOpenHelper {
             if  (c.moveToFirst()) {
                 do {
                     data.add(new InventoryItem(
-                            c.getString(c.getColumnIndex(ID)),
+                            c.getString(c.getColumnIndex(ITEM)),
                             c.getString(c.getColumnIndex(MODEL_NUMBER)),
                             c.getString(c.getColumnIndex(SERIAL_NUMBER)),
-                            c.getString(c.getColumnIndex(ITEM))
+                            c.getString(c.getColumnIndex(ID))
                     ));
                 }while (c.moveToNext());
             }
@@ -131,5 +130,28 @@ public class SqliteHelper extends SQLiteOpenHelper {
 
         return data;
     }
+
+    public InventoryItem getData(String id) {
+        Cursor c = db.rawQuery("Select * from " + TABLE_NAME + " where unique_id = " + id, null);
+        InventoryItem item = null;
+        if (c.moveToFirst()) {
+            item = new InventoryItem(
+                            c.getString(c.getColumnIndex(ITEM)),
+                            c.getString(c.getColumnIndex(MODEL_NUMBER)),
+                            c.getString(c.getColumnIndex(SERIAL_NUMBER)),
+                            c.getString(c.getColumnIndex(ID)));
+        }
+        return item;
+    }
+
+    public void modifyItem(InventoryItem item) {
+        String query = "Update from " + TABLE_NAME +
+                        "set " + MODEL_NUMBER + " = " + item.getModelNumber() +
+                        ", " + SERIAL_NUMBER + " = " + item.getSerialNumber() +
+                        ", " + ITEM + " = " + item.getItem() +
+                        "where " + ID + " = " + item.getId();
+        db.rawQuery(query, null);
+    }
+
 
 }

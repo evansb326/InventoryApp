@@ -16,11 +16,7 @@ public class CreateActivity extends AppCompatActivity {
     EditText editTextID;
     Button createButton;
 
-    private int id;
-
-    public void CreateActivity(int id){
-        this.id = id;
-    }
+    private String id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,11 +30,20 @@ public class CreateActivity extends AppCompatActivity {
         editTextID = (EditText)findViewById(R.id.editTextID);
         createButton = (Button) findViewById(R.id.createButton);
 
-        if (id >= 0) {
+        Intent intent = getIntent();
+
+        id = intent.getStringExtra("id");
+        if (Integer.parseInt(id) >= 0) {
+            SqliteHelper database = new SqliteHelper(this.getApplicationContext());
+            InventoryItem item = database.getData(id);
+
+            editTextItem.setText(item.getItem());
+            editTextModel.setText(item.getModelNumber());
+            editTextSerial.setText(item.getSerialNumber());
+            editTextID.setText(item.getId());
 
         }
 
-        Intent intent = getIntent();
         intent.getIntExtra("position", 0);
 
         createButton.setOnClickListener(new View.OnClickListener(){
@@ -52,6 +57,10 @@ public class CreateActivity extends AppCompatActivity {
                         editTextID.getText().toString()
 
                 );
+                if(!id.isEmpty()) {
+                    bundle.putSerializable("modify", "True");
+                }
+
                 Intent intent = new Intent();
                 bundle.putSerializable("invItem", newItem);
                 intent.putExtras(bundle);

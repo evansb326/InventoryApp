@@ -47,9 +47,9 @@ class InventoryItem implements Serializable {
     }
 
     public String toString() {
-        return "Item: " + item  + "\n" +
+        return "ID Number: " + id + "\n" +
+                "Item: " + item  + "\n" +
                 "Model Number: " + modelNumber + "\n" +
-                "Serial Number: " + serialNumber + "\n" +
-                "ID Number: " + id;
+                "Serial Number: " + serialNumber + "\n";
     }
 }
