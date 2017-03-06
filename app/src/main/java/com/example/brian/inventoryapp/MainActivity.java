@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
     //Create request variable used to get the data from CreateActivity class
     public static final int CREATE_REQUEST = 1;
+    public static final int MODIFY_REQUEST = 2;
 
     //Global variables
     private Button addButton;
@@ -52,20 +53,11 @@ public class MainActivity extends AppCompatActivity {
         //Instantiating the SqliteHelper class named dbContext
         dbContext = new SqliteHelper(this.getApplicationContext());
 
-        //ArrayList that populates the list view when the app starts using a for each loop
-        //The currentData ArrayList uses the getData method thats created in the SqliteHelper class
-        ArrayList currentData = dbContext.getData();
-        ArrayList<String> currentDataStrings = new ArrayList<>();
-        for (Object item : currentData) {
-            currentDataStrings.add(item.toString());
-        }
-        //Adding to the arrayList that I created earlier
-        arrayList.addAll(currentDataStrings);
-
         //The adapter that holds the arrayList and uses
         // the built in simple_list_item_1 format to show inventory items
         arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, arrayList);
         itemListView.setAdapter(arrayAdapter);
+        refreshListView();
         registerForContextMenu(itemListView);
 
         //Make a button and set the onClickListener to take you to another activity
@@ -115,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
         String id = extractItemId(listStuff);
         intent.putExtra("id", id);
         Log.i("Position:", listStuff);
-        startActivity(intent);
+        startActivityForResult(intent, MODIFY_REQUEST);
 
     }
 
@@ -133,25 +125,36 @@ public class MainActivity extends AppCompatActivity {
     // items and gets saved to the database also uses an intent thats used to transfer data
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == CREATE_REQUEST){
-            if(resultCode == RESULT_OK){
-                InventoryItem item = (InventoryItem)data.getExtras().get("invItem");
+        if (resultCode == RESULT_OK) {
+            SqliteHelper database = new SqliteHelper(this.getApplicationContext());
+            InventoryItem item = (InventoryItem)data.getExtras().get("invItem");
 
-                //String item = data.getStringExtra("data");
-                arrayList.add(item.toString());
-                arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, arrayList);
-                itemListView.setAdapter(arrayAdapter);
-
-                SqliteHelper database = new SqliteHelper(this.getApplicationContext());
-                //Add to the db
-                if (data.getExtras().containsKey("modify"))
+            switch (requestCode) {
+                case MODIFY_REQUEST:
                     database.modifyItem(item);
-                else
+                    break;
+                case CREATE_REQUEST:
+                    arrayList.add(item.toString());
+                    arrayAdapter.notifyDataSetChanged();
                     database.addToDatabase(item);
+                    break;
+                default: break;
             }
+            refreshListView();
         }
 
+        //arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, arrayList);
+        //itemListView.setAdapter(arrayAdapter);
+    }
 
-
+    private void refreshListView() {
+        arrayList.clear();
+        ArrayList currentData = dbContext.getData();
+        ArrayList<String> currentDataStrings = new ArrayList<>();
+        for (Object item : currentData) {
+            currentDataStrings.add(item.toString());
+        }
+        arrayList.addAll(currentDataStrings);
+        arrayAdapter.notifyDataSetChanged();
     }
 }

@@ -145,12 +145,14 @@ public class SqliteHelper extends SQLiteOpenHelper {
     }
 
     public void modifyItem(InventoryItem item) {
-        String query = "Update from " + TABLE_NAME +
-                        "set " + MODEL_NUMBER + " = " + item.getModelNumber() +
-                        ", " + SERIAL_NUMBER + " = " + item.getSerialNumber() +
-                        ", " + ITEM + " = " + item.getItem() +
-                        "where " + ID + " = " + item.getId();
-        db.rawQuery(query, null);
+        String query = "UPDATE " + TABLE_NAME +
+                        " SET " + MODEL_NUMBER + " = '" + item.getModelNumber() +
+                        "', " + SERIAL_NUMBER + " = '" + item.getSerialNumber() +
+                        "', " + ITEM + " = '" + item.getItem() +
+                        "' WHERE " + ID + " = " + item.getId();
+        Cursor c = db.rawQuery(query, null);
+        c.moveToFirst();
+        c.close();
     }
 
 

@@ -4,7 +4,7 @@ package com.example.brian.inventoryapp;
 
 import java.io.Serializable;
 
-class InventoryItem implements Serializable {
+public class InventoryItem implements Serializable {
     private String item;
     private String modelNumber;
     private String serialNumber;

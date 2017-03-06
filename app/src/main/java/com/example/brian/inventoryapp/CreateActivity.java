@@ -22,7 +22,7 @@ public class CreateActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create);
-        getIntent();
+        //getIntent();
 
         editTextItem = (EditText)findViewById(R.id.editTextItem);
         editTextModel = (EditText)findViewById(R.id.editTextModel);
@@ -33,7 +33,7 @@ public class CreateActivity extends AppCompatActivity {
         Intent intent = getIntent();
 
         id = intent.getStringExtra("id");
-        if (Integer.parseInt(id) >= 0) {
+        if(id != null && Integer.parseInt(id) >= 0) {
             SqliteHelper database = new SqliteHelper(this.getApplicationContext());
             InventoryItem item = database.getData(id);
 
@@ -41,30 +41,23 @@ public class CreateActivity extends AppCompatActivity {
             editTextModel.setText(item.getModelNumber());
             editTextSerial.setText(item.getSerialNumber());
             editTextID.setText(item.getId());
-
         }
-
         intent.getIntExtra("position", 0);
 
         createButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
+                Intent intent = new Intent(CreateActivity.this, MainActivity.class);
                 InventoryItem newItem = new InventoryItem(
                         editTextItem.getText().toString(),
                         editTextModel.getText().toString(),
                         editTextSerial.getText().toString(),
                         editTextID.getText().toString()
-
                 );
-                if(!id.isEmpty()) {
-                    bundle.putSerializable("modify", "True");
-                }
 
-                Intent intent = new Intent();
                 bundle.putSerializable("invItem", newItem);
                 intent.putExtras(bundle);
-                //intent.putExtra("InventoryItem", newItem);
                 setResult(RESULT_OK, intent);
                 finish();
 
@@ -72,6 +65,8 @@ public class CreateActivity extends AppCompatActivity {
         });
 
     }
+
+    private boolean isModified() { return id != null && !id.isEmpty(); }
 
 
 
