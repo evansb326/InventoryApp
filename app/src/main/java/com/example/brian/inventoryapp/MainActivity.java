@@ -19,6 +19,7 @@ import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -87,8 +88,9 @@ public class MainActivity extends AppCompatActivity {
         info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
         switch (item.getItemId()){
             case R.id.delete:
-                arrayList.remove(info.position);
                 dbContext.removeData(info.position);
+                arrayList.remove(info.position);
+
                 Toast.makeText(MainActivity.this, "Deleted", Toast.LENGTH_SHORT).show();
                 arrayAdapter.notifyDataSetChanged();
                 return true;
@@ -121,6 +123,9 @@ public class MainActivity extends AppCompatActivity {
         return "";
     }
 
+
+
+
     //The onActivityResult method is how the listview is populated with new inventory
     // items and gets saved to the database also uses an intent thats used to transfer data
     @Override
@@ -143,8 +148,7 @@ public class MainActivity extends AppCompatActivity {
             refreshListView();
         }
 
-        //arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, arrayList);
-        //itemListView.setAdapter(arrayAdapter);
+
     }
 
     private void refreshListView() {

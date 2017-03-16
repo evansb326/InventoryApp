@@ -32,7 +32,6 @@ public class SqliteHelper extends SQLiteOpenHelper {
     //Inventory table column names
     public static final String ITEM = "inventory_item";
     public static final String MODEL_NUMBER = "model_number";
-
     public static final String SERIAL_NUMBER = "serial_number";
     public static final String ID = "unique_id";
 
@@ -103,10 +102,11 @@ public class SqliteHelper extends SQLiteOpenHelper {
     }
 
     //Used to remove inventory items
-    //Currently not in use
     public boolean removeData(int position) {
-        db.delete(TABLE_NAME, position + "=" + position, null);
+
+        db.delete(TABLE_NAME, ID + "=" + position, null);
         return true;
+
     }
 
     //Selects on items in enventory using a Cursor that gets the rawQuery
