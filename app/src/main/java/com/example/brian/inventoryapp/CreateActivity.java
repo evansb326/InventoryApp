@@ -1,6 +1,8 @@
 package com.example.brian.inventoryapp;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,6 +25,7 @@ public class CreateActivity extends AppCompatActivity {
     Button saveButton;
     ImageButton imageButtonModel;
     ImageButton imageButtonSerial;
+    static final String SCAN_PACKAGE = "com.google.zxing.client.android.SCAN";
 
 
 
@@ -30,8 +33,6 @@ public class CreateActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create);
-
-
 
         editTextItem = (EditText)findViewById(R.id.editTextItem);
         editTextModel = (EditText)findViewById(R.id.editTextModel);
@@ -47,30 +48,36 @@ public class CreateActivity extends AppCompatActivity {
         imageButtonModel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                IntentIntegrator integrator = new IntentIntegrator(CreateActivity.this);
-                integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
-                integrator.setPrompt("Scan");
-                integrator.setCameraId(0);
-                integrator.setBeepEnabled(false);
-                integrator.setBarcodeImageEnabled(false);
-                integrator.initiateScan();
+               try {
+                   int requestCode = 0;
+                   Intent modelIntent = new Intent(SCAN_PACKAGE);
+                   modelIntent.putExtra("SCAN_FORMATS","CODE_39,CODE_93,CODE_128,DATA_MATRIX,ITF,CODABAR,EAN_13,EAN_8,UPC_A,QR_CODE");
+                   startActivityForResult(modelIntent, requestCode);
+               }catch (Exception e){
+                   Uri marketUri = Uri.parse("market://details?id=com.google.zxing.client.android");
+                   Intent marketIntent = new Intent(Intent.ACTION_VIEW,marketUri);
+                   startActivity(marketIntent);
+               }
+
             }
         });
 
-        imageButtonSerial.setOnClickListener(new View.OnClickListener(){
+        imageButtonSerial.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                IntentIntegrator integrator = new IntentIntegrator(CreateActivity.this);
-                integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
-                integrator.setPrompt("Scan");
-                integrator.setCameraId(0);
-                integrator.setBeepEnabled(false);
-                integrator.setBarcodeImageEnabled(false);
-                integrator.initiateScan();
+                try {
+                    int requestCode = 1;
+                    Intent serialIntent = new Intent(SCAN_PACKAGE);
+                    serialIntent.putExtra("SCAN_FORMATS","CODE_39,CODE_93,CODE_128,DATA_MATRIX,ITF,CODABAR,EAN_13,EAN_8,UPC_A,QR_CODE");
+                    startActivityForResult(serialIntent, requestCode);
+                }catch (Exception e){
+                    Uri marketUri = Uri.parse("market://details?id=com.google.zxing.client.android");
+                    Intent marketIntent = new Intent(Intent.ACTION_VIEW,marketUri);
+                    startActivity(marketIntent);
+                }
+
             }
-
         });
-
 
 
         Intent intent = getIntent();
@@ -108,27 +115,26 @@ public class CreateActivity extends AppCompatActivity {
 
     }
 
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-        if (result != null){
-            if (result.getContents() == null){
-                Log.d("CreateActivity", "Cancelled Scan");
-                Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
-            }else {
-                Log.d("CreateActivity", "Scanned");
-                Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_SHORT).show();
-                editTextSerial.setText(result.getContents());
-            }
-        }else {
-            super.onActivityResult(requestCode, resultCode, data);
-        }
 
+        switch (requestCode){
+            case 0:
+                String modelContents = data.getStringExtra("SCAN_RESULT");
+                editTextModel.setText(modelContents);
+                break;
+            case 1:
+                String serialContents = data.getStringExtra("SCAN_RESULT");
+                editTextSerial.setText(serialContents);
+                break;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
-   // private boolean isModified() { return id != null && !id.isEmpty(); }
-
-
+    // private boolean isModified() { return id != null && !id.isEmpty(); }
 
 
 }

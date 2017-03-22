@@ -74,6 +74,18 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
+    private void editItem(int position) {
+        Intent intent = new Intent(MainActivity.this, CreateActivity.class);
+        String listStuff = arrayList.get(position);
+
+        String id = extractItemId(listStuff);
+        intent.putExtra("id", id);
+        Log.i("Position:", listStuff);
+        startActivityForResult(intent, MODIFY_REQUEST);
+
+    }
+
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
@@ -81,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
         inflater.inflate(R.menu.item_context_menu, menu);
 
     }
+
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
@@ -102,16 +115,7 @@ public class MainActivity extends AppCompatActivity {
     }
 }
 
-    private void editItem(int position) {
-        Intent intent = new Intent(MainActivity.this, CreateActivity.class);
-        String listStuff = arrayList.get(position);
 
-        String id = extractItemId(listStuff);
-        intent.putExtra("id", id);
-        Log.i("Position:", listStuff);
-        startActivityForResult(intent, MODIFY_REQUEST);
-
-    }
 
     private String extractItemId(String text) {
         final Pattern regex = Pattern.compile("(\\d+)");
