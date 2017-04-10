@@ -5,6 +5,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -104,6 +105,21 @@ public class CreateActivity extends AppCompatActivity {
                         editTextSerial.getText().toString(),
                         editTextID.getText().toString()
                 );
+
+                String checkTextItem = editTextItem.getText().toString();
+                String checkTextModel = editTextModel.getText().toString();
+                String checkTextSerial = editTextSerial.getText().toString();
+
+                if (TextUtils.isEmpty((checkTextItem))){
+                    editTextItem.setError("The item name cannot be empty.");
+                    return;
+                }else if (TextUtils.isEmpty(checkTextModel)){
+                    editTextModel.setError("The model number cannot be empty.");
+                    return;
+                }else if (TextUtils.isEmpty(checkTextSerial)){
+                    editTextSerial.setError("The serial number cannot be empty.");
+                    return;
+                }
 
                 bundle.putSerializable("invItem", newItem);
                 intent.putExtras(bundle);

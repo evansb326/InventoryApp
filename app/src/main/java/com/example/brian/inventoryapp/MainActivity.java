@@ -100,13 +100,13 @@ public class MainActivity extends AppCompatActivity {
         AdapterView.AdapterContextMenuInfo info;
         info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
         switch (item.getItemId()){
-            case R.id.delete:
-                dbContext.removeData(info.position);
+         /* case R.id.delete:
+              dbContext.removeData(info.position);
                 arrayList.remove(info.position);
 
                 Toast.makeText(MainActivity.this, "Deleted", Toast.LENGTH_SHORT).show();
                 arrayAdapter.notifyDataSetChanged();
-                return true;
+                return true;  */
             case R.id.edit:
                 editItem(info.position);
             default:
